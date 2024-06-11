@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urodziny Kamili</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+        #video-container, #gallery-container {
+            display: none;
+        }
+        #gallery-container.active {
+            display: block;
+            width: 80%;
+            margin: auto;
+            text-align: center;
+        }
+        .gallery-image {
+            margin: 10px;
+            display: inline-block;
+            transition: transform 0.2s;
+        }
+        .gallery-image img {
+            max-width: 200px;
+            cursor: pointer;
+        }
+        .fullscreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        .fullscreen img {
+            max-width: 90%;
+            max-height: 90%;
+        }
+    </style>
+</head>
+<body>
+    <div id="password-container">
+        <h1>Wprowadź hasło, aby kontynuować</h1>
+        <input type="password" id="password" placeholder="Hasło">
+        <button onclick="checkPassword()">Otwórz</button>
+    </div>
+
+    <div id="video-container">
+        <video id="birthday-video" width="100%" height="100%" controls>
+            <source src="video.mp4" type="video/mp4">
+            Twoja przeglądarka nie wspiera odtwarzania wideo.
+        </video>
+    </div>
+
+    <div id="gallery-container">
+        <audio id="background-music" src="music.mp3" loop></audio>
+        <div id="gallery">
+            <!-- Tutaj będą umieszczone zdjęcia -->
+        </div>
+    </div>
+
+    <div id="fullscreen-container" class="fullscreen" style="display: none;">
+        <img id="fullscreen-image" src="" alt="Duże zdjęcie">
+        <button onclick="closeFullscreen()" style="position: absolute; top: 10px; right: 10px; font-size: 24px; color: white;">✖</button>
+    </div>
+
+    <script>
+        const password = "urodziny";
+        const images = [
+            "image1.jpg", "image2.jpg", "image3.jpg", "image4.jpg", "image5.jpg", 
+            "image6.jpg", "image7.jpg", "image8.jpg", "image9.jpg", "image10.jpg", 
+            "image11.jpg", "image12.jpg", "image13.jpg", "image14.jpg", "image15.jpg", 
+            "image16.jpg", "image17.jpg", "image18.jpg", "image19.jpg", "image20.jpg", 
+            "image21.jpg", "image22.jpg", "image23.jpg", "image24.jpg", "image25.jpg", 
+            "image26.jpg", "image27.jpg", "image28.jpg", "image29.jpg", "image30.jpg"
+        ];
+
+        function checkPassword() {
+            const inputPassword = document.getElementById('password').value;
+            if (inputPassword === password) {
+                document.getElementById('password-container').style.display = 'none';
+                document.getElementById('video-container').style.display = 'flex';
+                document.getElementById('birthday-video').play();
+                document.getElementById('birthday-video').onended = () => {
+                    document.getElementById('video-container').style.display = 'none';
+                    document.getElementById('gallery-container').classList.add('active');
+                    document.getElementById('background-music').play();
+                };
+            } else {
+                alert('Nieprawidłowe hasło!');
+            }
+        }
+
+        function createGallery() {
+            const gallery = document.getElementById('gallery');
+            images.forEach(src => {
+                const div = document.createElement('div');
+                div.classList.add('gallery-image');
+                const img = document.createElement('img');
+                img.src = src;
+                img.alt = "Zdjęcie";
+                img.onclick = () => openFullscreen(src);
+                div.appendChild(img);
+                gallery.appendChild(div);
+            });
+        }
+
+        function openFullscreen(src) {
+            document.getElementById('fullscreen-image').src = src;
+            document.getElementById('fullscreen-container').style.display = 'flex';
+        }
+
+        function closeFullscreen() {
+            document.getElementById('fullscreen-container').style.display = 'none';
+        }
+
+        createGallery();
+    </script>
+</body>
+</html>
